@@ -1,0 +1,28 @@
+li.p-3.list-group-item .custom-radio {
+    margin-left: 18px;
+}
+.img-category-modal .ant-upload-select-picture-card {
+  margin-bottom: 0;  
+}
+
+.img-category-btn {
+  padding: 212px;
+  width: 500px;
+  height: 500px;
+}
+
+.img-close {
+  background-color: white !important;
+  color: black !important;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+}
+
+.level .custom-radio {
+  margin-right: 2px !important;
+}
+
+.ck-content {
+  height: 455px;
+}
