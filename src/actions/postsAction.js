@@ -231,6 +231,7 @@ export const getPostByPostId = (params = {
         const result = await axios.get('blog/post/'+params.post_id,requestConfig());
         let {data} = result.data;
         dispatch(_getPostByPostId(data));
+        return result;
     };
 };
 

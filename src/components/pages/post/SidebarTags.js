@@ -23,8 +23,7 @@ class SidebarTags extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tagName:'',
-      tagCheck: []
+      tagName:''
     }
     this.handleAddTag = this.handleAddTag.bind(this);
     this.handleCheckTag = this.handleCheckTag.bind(this);
@@ -34,16 +33,6 @@ class SidebarTags extends React.Component {
   componentDidMount() {
     this.props.getTags();
   }
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.tags) {
-      this.setState({tagCheck: []});
-    }
-  }
-
-  componentDidUpdate () {
-    const {tagCheck} = this.state;
-    this.props.handleGetTagCheck(tagCheck);
-  }
   
   handleTagNameChange = (e) => {
     this.setState({
@@ -52,20 +41,17 @@ class SidebarTags extends React.Component {
   }
 
   handleCheckTag = (e) => {
-    let tagId = e.currentTarget.getAttribute('tagId');
-    var arr = [...this.state.tagCheck];
+    let tagId = parseInt(e.currentTarget.getAttribute('tagId'));
+    var arr = [...this.props.checkTags];
     if(e.currentTarget.checked) {
       arr.push(tagId);
-      this.setState({
-        tagCheck: arr
-      })
     } else {
       var index = arr.indexOf(tagId);
       if (index !== -1) {
         arr.splice(index, 1);
-        this.setState({tagCheck: arr});
       }
     }
+    this.props.handleGetTagCheck(arr);
   }
 
   handleAddTag = (e) => {
@@ -95,9 +81,9 @@ class SidebarTags extends React.Component {
    });
   }
 
-  handleRemoveTag = (e) => {
-    const tagPrm = this.state.tagCheck;
-    this.props.removeTag(tagPrm).then((result) => {
+  handleRemoveTag = async (e) => {
+    const tagPrm = this.props.checkTags;
+    await this.props.removeTag(tagPrm).then((result) => {
       notification.success({
         message: 'Life Code',
         description: result.data.message
@@ -109,7 +95,8 @@ class SidebarTags extends React.Component {
         message: 'Life Code',
         description: error.response.data.message
       }); 
-   });
+    });
+    this.props.handleGetTagCheck([]);
   }
 
   loadTags(tags) {
@@ -119,12 +106,12 @@ class SidebarTags extends React.Component {
         result.push(
           <div key={i} className="row">
             {<div className="col-md-6">
-            <FormCheckbox key={tags[i].tag_id} tagid={tags[i].tag_id} onChange={this.handleCheckTag} className="mb-1" value="design">
+            <FormCheckbox checked={this.isCheckedTag(tags[i].tag_id,this.props.checkTags)} key={tags[i].tag_id} tagid={tags[i].tag_id} onChange={this.handleCheckTag} className="mb-1" value="design">
               {tags[i].tag}
             </FormCheckbox>
             </div>}
             {(i+1)<tags.length&&<div className="col-md-6">
-            <FormCheckbox key={tags[i+1].tag_id} tagid={tags[i+1].tag_id} onClick={this.handleCheckTag} className="mb-1" value="design">
+            <FormCheckbox checked={this.isCheckedTag(tags[i+1].tag_id,this.props.checkTags)} key={tags[i+1].tag_id} tagid={tags[i+1].tag_id} onClick={this.handleCheckTag} className="mb-1" value="design">
               {tags[i+1].tag}
             </FormCheckbox>
             </div>}
@@ -133,6 +120,10 @@ class SidebarTags extends React.Component {
       }
     }
     return result;
+  }
+
+  isCheckedTag = (tagId, checkTags) => {
+    return checkTags.includes(tagId);
   }
 
   render() {
@@ -155,7 +146,7 @@ class SidebarTags extends React.Component {
                   okText="Yes"
                   cancelText="No"
                 >
-                  <Button outline style={{display:this.state.tagCheck.length>0?"block":"none"}} theme="danger" className="mr-2" size="sm">
+                  <Button outline style={{display:this.props.checkTags.length>0?"block":"none"}} theme="danger" className="mr-2" size="sm">
                     <i className="material-icons">delete</i>Delete
                   </Button>
                 </Popconfirm>

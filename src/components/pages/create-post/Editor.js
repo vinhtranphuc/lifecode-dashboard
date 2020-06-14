@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardBody, Form, FormInput } from "shards-react";
 
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@emetworks/ckeditor5-build-classic-plus';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import UploadImgAdapter from './UploadImgAdapter';
 
 import {connect} from "react-redux";
@@ -12,15 +12,15 @@ import {createPost} from "../../../actions/postsAction";
 
 class Editor extends React.Component {
 
+  onChangeTitle (e){
+    const title = e.target.value;
+    this.props.handleGetTitle(title)
+  }
+
   htmlDecode(input){
     var e = document.createElement('div');
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-  }
-
-  onChangeTitle (e){
-    const title = e.target.value;
-    this.props.handleGetTitle(title)
   }
 
   render () {
@@ -28,10 +28,10 @@ class Editor extends React.Component {
       <Card small className="mb-3">
         <CardBody>
           <Form className="add-new-post">
-            <FormInput size="lg" className="mb-3" placeholder="Your Post Title" value={this.props.title} onChange={this.onChangeTitle.bind(this)}/>
+            <FormInput size="lg" className="mb-3" placeholder="Your Post Title"  onChange={this.onChangeTitle.bind(this)}/>
             <CKEditor
                     editor={ ClassicEditor }
-                    data={this.htmlDecode(this.props.content)}
+                    data=""
                     onInit={editor => {
                       editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                         return new UploadImgAdapter(loader);

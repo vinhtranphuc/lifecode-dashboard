@@ -5,7 +5,8 @@ import {
     CardHeader,
     CardBody
   } from "shards-react";
-import { Upload, Modal } from 'antd';
+import { Upload, Modal, message } from 'antd';
+import { notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 function getBase64(file) {
@@ -17,29 +18,46 @@ function getBase64(file) {
   });
 }
 
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 10;
+  if (!isLt2M) {
+    message.error('Image must smaller than 10MB!');
+    notification.warning({
+      message: 'Life Code',
+      description: 'Image must smaller than 10MB!',
+      style:{zIndex:"9999"}
+    });
+  }
+  return isJpgOrPng && isLt2M; 
+}
+
 class PostImages extends React.Component {
   state = {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
     fileList: [
-    //   {
-    //     uid: '-1',
-    //     name: 'image.png',
-    //     status: 'done',
-    //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    //   },
-    //   {
-    //     uid: '-2',
-    //     name: 'image.png',
-    //     status: 'done',
-    //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    //   },
-    //   {
-    //     uid: '-5',
-    //     name: 'image.png',
-    //     status: 'error',
-    //   },
+      // {
+      //   uid: '1',
+      //   name: 'image.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
+      // {
+      //   uid: '2',
+      //   name: 'image.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
+      // {
+      //   uid: '3',
+      //   name: 'image.png',
+      //   status: 'error',
+      // },
     ],
   };
 
@@ -59,12 +77,15 @@ class PostImages extends React.Component {
 
   handleChange = ({ fileList }) => {
     this.setState({ fileList })
-    fileList = fileList.map(item => (item['thumbUrl']));
+    // fileList = fileList.map(item => (item['thumbUrl']));
+    // fileList = fileList.map(item => (item.response[0]));
+    debugger
     this.props.handleGetPostImages(fileList)
   };
 
   render() {
-    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    let { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    // fileList = this.props.postImages?this.props.postImages:fileList;
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -86,6 +107,7 @@ class PostImages extends React.Component {
                     fileList={fileList}
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
+                    beforeUpload={beforeUpload}
                 >
                     {fileList.length >= 6 ? null : uploadButton}
                 </Upload>

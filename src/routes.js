@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, NotFound} from "react-router-dom";
 
 // Layout Types
 import DashboardtLayout from "./components/dashboard_layout";
@@ -8,7 +8,7 @@ import DashboardtLayout from "./components/dashboard_layout";
 import Overview from "./components/pages/overview/Overview";
 import UserProfile from "./components/pages/user-profile/UserProfile";
 import Post from "./components/pages/post/Post";
-import Errors from "./components/pages/errors/Errors";
+import Errors from "./components/pages/errors/Error500";
 import ComponentsOverview from "./components/pages/components-overview/ComponentsOverview";
 import PostManagement from "./components/pages/post-management/PostManagement";
 import UserManagement from "./components/pages/user-management/UserManagement";
@@ -17,6 +17,8 @@ import HomePosts from "./components/pages/home-posts/HomePosts";
 import PublicLayout from "./components/public_layout";
 import Login from "./components/pages/login/Login";
 import Signup from "./components/pages/signup/Signup";
+
+import Error404 from "./components/pages/errors/Error404"
 
 export default [
   {
@@ -82,5 +84,10 @@ export default [
     path: "/components-overview",
     layout: DashboardtLayout,
     component: ComponentsOverview
-  }
+  },
+  {
+    path: "/not-found",
+    layout: DashboardtLayout,
+    component: Error404
+  },
 ];

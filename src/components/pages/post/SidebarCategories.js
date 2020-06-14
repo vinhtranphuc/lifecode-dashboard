@@ -29,32 +29,19 @@ class SidebarCategories extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      categoryIdSelect: "",
       category: "",
       categoryImg: ""
     };
     this.handleSelectCategory = this.handleSelectCategory.bind(this);
   }
 
-  componentDidMount() {
-    this.props.getCategories();
-  }
-  componentDidUpdate() {
-    const {categoryIdSelect} = this.state
-    this.props.handleGetCategory(categoryIdSelect);
-  }
-
   handleSelectCategory(e) {
     let categoryId = e.currentTarget.getAttribute('categoryid');
-    if(this.state.categoryIdSelect === categoryId) {
-      this.setState({
-        categoryIdSelect:""
-      })
-      return;
-    }
-    this.setState({
-      categoryIdSelect:categoryId
-    })
+    this.props.handleGetCategory(categoryId);
+  }
+
+  componentDidMount() {
+    this.props.getCategories();
   }
 
   loadCategories = (categories) => {
@@ -64,12 +51,12 @@ class SidebarCategories extends React.Component {
         result.push(
           <div key={i} className="row">
             {<div className="col-md-6">
-            <FormRadio checked={this.state.categoryIdSelect === categories[i].category_id} onClick={this.handleSelectCategory} key={categories[i].category_id} categoryid = {categories[i].category_id} className="mb-1" value="design" name="category">
+            <FormRadio checked={this.props.categoryId === categories[i].category_id} onClick={this.handleSelectCategory} key={categories[i].category_id} categoryid = {categories[i].category_id} className="mb-1" value="design" name="category">
               {categories[i].category}
             </FormRadio>
             </div>}
             {(i+1)<categories.length&&<div className="col-md-6">
-            <FormRadio checked={this.state.categoryIdSelect === categories[i+1].category_id} onClick={this.handleSelectCategory} key={categories[i+1].category_id} categoryid = {categories[i+1].category_id} className="mb-1" value="design" name="category">
+            <FormRadio checked={this.props.categoryId === categories[i+1].category_id} onClick={this.handleSelectCategory} key={categories[i+1].category_id} categoryid = {categories[i+1].category_id} className="mb-1" value="design" name="category">
               {categories[i+1].category}
             </FormRadio>
             </div>}
@@ -103,10 +90,10 @@ class SidebarCategories extends React.Component {
         visible: true,
       });
     }).catch(function (error) {
-      notification.error({
+      notification.warning({
         message: 'Life Code',
-        description: 'AN ERROR OCCURRED !'
-      });
+        description: error.response.data.message
+      }); 
       return;
     });
   };
@@ -151,13 +138,6 @@ class SidebarCategories extends React.Component {
           categoryImg:"",
           category:""
         })
-
-        if(result.data.status === 409) {
-          notification.warning({
-            message: 'Life Code',
-            description: result.data.message
-          });
-        }
       }).catch(function (error) {
         notification.warning({
           message: 'Life Code',
@@ -166,16 +146,15 @@ class SidebarCategories extends React.Component {
       });
   };
 
-  handleRemoveCategory(e) {
-    const categoryPrm = this.state.categoryIdSelect;
-    this.props.removeCategory(categoryPrm).then((result) => {
+   handleRemoveCategory = async (e) => {
+    const categoryPrm = this.props.categoryId;
+    await this.props.removeCategory(categoryPrm).then((result) => {
         if(result.data.status === 200) {
           notification.success({
             message: 'Life Code',
             description: result.data.message
             });
             this.props.getCategories();
-            this.setState({categoryIdSelect:"" });
           return;
         }
 
@@ -187,11 +166,12 @@ class SidebarCategories extends React.Component {
           return;
         }
     }).catch(function (error) {
-      notification.error({
+      notification.warning({
         message: 'Life Code',
-        description: 'AN ERROR OCCURRED !'
+        description: error.response.data.message
       }); 
    });
+   this.props.handleGetCategory("");
   }
 
   handleUpdateCatetory(e) {
@@ -217,7 +197,7 @@ class SidebarCategories extends React.Component {
                   <Popconfirm
                     placement="left"
                     title={"Are you sure to remove this category?"}
-                    onConfirm={this.handleRemoveCategory.bind(this)}
+                    onConfirm={this.handleRemoveCategory}
                     okText="Yes"
                     cancelText="No"
                   >

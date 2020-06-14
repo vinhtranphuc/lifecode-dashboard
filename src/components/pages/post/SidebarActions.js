@@ -16,18 +16,9 @@ class SidebarActions extends React.Component {
 
   constructor() {
     super();
-    this.state = {
-      isSaved: false,
-      levelSelect:'5'
-    }
     this.onChangeLevel = this.onChangeLevel.bind(this);
   }
 
-  updateSaveStatus(isSaved){
-    this.setState({
-      isSaved:isSaved
-    })
-  }
   componentDidMount() {
     this.props.onRef(this);
   }
@@ -38,9 +29,6 @@ class SidebarActions extends React.Component {
 
   onChangeLevel(e) {
     let level = e.currentTarget.getAttribute('level');
-    this.setState({
-      levelSelect:level
-    })
     this.props.handleGetLevel(level)
   }
   render() {
@@ -55,16 +43,16 @@ class SidebarActions extends React.Component {
               <span className="d-flex mb-2 level">
                 <i className="material-icons mr-1">flag</i>
                 <strong className="mr-1">Level:</strong>
-                <FormRadio checked={this.state.levelSelect==1} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='1'>1</FormRadio>
-                <FormRadio checked={this.state.levelSelect==2} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='2'>2</FormRadio>
-                <FormRadio checked={this.state.levelSelect==3} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='3'>3</FormRadio>
-                <FormRadio checked={this.state.levelSelect==4} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='4'>4</FormRadio>
-                <FormRadio checked={this.state.levelSelect==5} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='5'>5</FormRadio>
+                <FormRadio checked={parseInt(this.props.level)===1} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='1'>1</FormRadio>
+                <FormRadio checked={parseInt(this.props.level)===2} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='2'>2</FormRadio>
+                <FormRadio checked={parseInt(this.props.level)===3} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='3'>3</FormRadio>
+                <FormRadio checked={parseInt(this.props.level)===4} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='4'>4</FormRadio>
+                <FormRadio checked={parseInt(this.props.level)===5} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='5'>5</FormRadio>
               </span>
               <span className="d-flex mb-2">
                 <i className="material-icons mr-1">visibility</i>
                 <strong className="mr-1">Visibility:</strong>{" "}
-                <strong className={this.state.levelSelect==5?'text-danger':'text-success'}>{this.state.levelSelect==5?'Draft':'Public'}</strong>{" "}
+                <strong className={parseInt(this.props.level)===5?'text-danger':'text-success'}>{parseInt(this.props.level)===5?'Draft':'Public'}</strong>{" "}
               </span>
               <span className="d-flex mb-2">
                 <i className="material-icons mr-1">calendar_today</i>
@@ -73,7 +61,7 @@ class SidebarActions extends React.Component {
             </ListGroupItem>
             <ListGroupItem className="d-flex px-3 border-0" style={{paddingTop:0}}>
               <Button onClick={this.props.handleSave} outline theme="accent" size="sm" style = {{width: '40%', marginLeft: '33%'}}>
-                <i className="material-icons">{this.state.isSaved?'edit':'save'}</i>{this.state.isSaved?' EDIT POST':' CREATE NEW POST'}
+                <i className="material-icons">{this.props.isSaved?'edit':'save'}</i>{this.props.isSaved?' EDIT POST':' CREATE NEW POST'}
               </Button>
             </ListGroupItem>
           </ListGroup>

@@ -20,18 +20,12 @@ class Post extends React.Component {
 
   constructor(props) {
     super(props);
-
     let post_id = props.match.params.post_id;
-    if(post_id) {
-      let params = {
-        post_id:post_id
-      }
-      this.props.getPostByPostId(params);
-    }
-    
+    post_id = post_id?post_id:''
     this.state = {
       isSaved:false,
       postPrm: {
+        postId:post_id,
         categoryId:'',
         tags:[],
         level:5,
@@ -42,15 +36,39 @@ class Post extends React.Component {
     }
   }
 
+  async componentDidMount() { 
+    const {postId} = this.state.postPrm;
+    if(postId > 0) {
+      let status = 0;
+      await this.props.getPostByPostId({post_id:postId}).then((result) => {
+        status = 200;
+      }).catch(function (error) {
+        status = error.response.status;
+      });
+      if(status === 200) {
+        this.setState({
+          isSaved: true
+        })
+      }
+      if(status === 404) {
+        this.props.history.push('/not-found');
+      }
+    }
+  }
+
   componentWillReceiveProps(newProps) {
     const {post} = newProps;
     const {postPrm} = this.state;
-    postPrm.categoryId = post.post_id;
+    postPrm.postId = post.post_id;
+    postPrm.categoryId = post.category_id;
     postPrm.tags = post.tags.map(item => item.tag_id);
+    postPrm.level = post.level;
     postPrm.postImages = post.images.map(item => item.path);
-    // this.setState({
-    //   postPrm: post
-    // })
+    postPrm.title = post.title;
+    postPrm.content = post.content;
+    this.setState({
+      postPrm: postPrm
+    })
   }
  
   handleGetTitle(title) {
@@ -61,7 +79,9 @@ class Post extends React.Component {
     })
   }
   shouldComponentUpdate(nextProps, nextState) {
-    const {tags, categoryId, title, level, postImages, content} = nextState.postPrm;
+    const {postId, tags, categoryId, title, level, postImages, content} = nextState.postPrm;
+    if(postId > 0) 
+      return true;
     return tags.length < 1 && categoryId==='' && title==='' && level === 0 && postImages.length < 1 && content === '';
   }
   handleGetPostImages(postImages) {
@@ -79,6 +99,9 @@ class Post extends React.Component {
     })
   }
   handleGetCategory(categoryId) {
+    if(this.state.postPrm.categoryId === categoryId) {
+      categoryId = "";
+    }
     const {postPrm} = this.state;
     postPrm.categoryId = categoryId;
     this.setState({
@@ -121,6 +144,7 @@ class Post extends React.Component {
     });
   }
   render () {
+    const {postPrm} = this.state;
     return (
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Header */}
@@ -131,16 +155,18 @@ class Post extends React.Component {
           <Col lg="9" md="12">
             <Row>
               <Col lg="12" md="12">
-               <Editor handleGetTitle={this.handleGetTitle.bind(this)}/>
+               <Editor title={postPrm.title} content={postPrm.content} handleGetTitle={this.handleGetTitle.bind(this)}/>
               </Col>
             </Row>
             <Row>
               <Col lg="7" md="12">
-                <PostImages handleGetPostImages={this.handleGetPostImages.bind(this)}/>
+                <PostImages postImages={this.state.postPrm.postImages} handleGetPostImages={this.handleGetPostImages.bind(this)}/>
+                {/* postImages={this.state.postPrm.postImages} */}
               </Col>
               <Col lg="5" md="12">
                 <SidebarActions
-                  // isSaved={this.state.isSaved}
+                  isSaved={this.state.isSaved}
+                  level={this.state.postPrm.level}
                   onRef={ref => (this.actions = ref)}
                   handleGetLevel={this.handleGetLevel.bind(this)}
                   handleSave={this.handleSave.bind(this)}/>
@@ -148,8 +174,8 @@ class Post extends React.Component {
             </Row>
           </Col>
           <Col lg="3" md="12">
-            <SidebarCategories handleGetCategory={this.handleGetCategory.bind(this)}/>
-            <SidebarTags handleGetTagCheck={this.handleGetTagCheck.bind(this)}/>
+            <SidebarCategories categoryId={this.state.postPrm.categoryId} handleGetCategory={this.handleGetCategory.bind(this)}/>
+            <SidebarTags checkTags={this.state.postPrm.tags} handleGetTagCheck={this.handleGetTagCheck.bind(this)}/>
           </Col>
         </Row>
       </Container>
