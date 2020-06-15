@@ -201,7 +201,7 @@ class SidebarCategories extends React.Component {
                     okText="Yes"
                     cancelText="No"
                   >
-                    <Button outline style={{display:this.state.categoryIdSelect===""?"none":"block"}} theme="danger" className="mr-2" size="sm">
+                    <Button outline style={{display:this.props.categoryId===""?"none":"block"}} theme="danger" className="mr-2" size="sm">
                       <i className="material-icons">delete</i>Delete
                     </Button>
                   </Popconfirm>

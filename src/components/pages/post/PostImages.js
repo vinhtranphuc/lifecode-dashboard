@@ -75,12 +75,33 @@ class PostImages extends React.Component {
     });
   };
 
+  componentWillReceiveProps(nextProps) {
+    const {postImages} = nextProps;
+    let {fileList} = this.state;
+    if(postImages && postImages.length>fileList.length) {
+      nextProps.postImages.map((item, index) => {
+        let img = {
+          uid: index+1,
+          name: 'img_'+index+1,
+          status: 'saved',
+          url: item
+        }
+        fileList.push(img);
+      })
+      this.setState({
+        fileList: fileList
+      })
+    }
+  }
+
   handleChange = ({ fileList }) => {
-    this.setState({ fileList })
-    // fileList = fileList.map(item => (item['thumbUrl']));
-    // fileList = fileList.map(item => (item.response[0]));
-    debugger
-    this.props.handleGetPostImages(fileList)
+    this.setState({ fileList});
+    fileList = fileList.map(item => {
+      if(!item.response) 
+        return item.url;
+      return item.response[0]
+    }); 
+    this.props.handleGetPostImages(fileList);
   };
 
   render() {

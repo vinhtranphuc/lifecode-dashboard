@@ -243,6 +243,14 @@ export const createPost = (postPrm) => {
     };
 };
 
+export const editPost = (postPrm) => {
+    return async () => {
+        return await axios.post('blog/edit-post',postPrm,requestConfig()).then(result => {
+            return result;
+        });
+    };
+};
+
 // return () => {
 //     const tagObj = {
 //         tag: tagObjPrm.tag

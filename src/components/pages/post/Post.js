@@ -38,7 +38,7 @@ class Post extends React.Component {
 
   async componentDidMount() { 
     const {postId} = this.state.postPrm;
-    if(postId > 0) {
+    if(postId && postId.length > 0) {
       let status = 0;
       await this.props.getPostByPostId({post_id:postId}).then((result) => {
         status = 200;
@@ -78,12 +78,7 @@ class Post extends React.Component {
       postPrm: postPrm
     })
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    const {postId, tags, categoryId, title, level, postImages, content} = nextState.postPrm;
-    if(postId > 0) 
-      return true;
-    return tags.length < 1 && categoryId==='' && title==='' && level === 0 && postImages.length < 1 && content === '';
-  }
+
   handleGetPostImages(postImages) {
     const {postPrm} = this.state;
     postPrm.postImages = postImages;
@@ -122,26 +117,25 @@ class Post extends React.Component {
     const content = ckContent?ckContent.innerHTML:"";
 
     // get prm
-    let {postPrm} = this.state;
+    let {isSaved,postPrm} = this.state;
     postPrm.content = content; // put conent to prm
-    this.props.createPost(postPrm).then((result) => {
 
-      this.actions.updateSaveStatus(true);
-      notification.success({
-        message: 'Life Code',
-        description: result.data.message,
-      });
-    }).catch(function (error) {
-      const {messages} = error.response.data;
-        messages.map((item) => {
-          return (
-            notification.warning({
-              message: 'Life Code',
-              description: item
+    if(!isSaved) {
+      this.props.createPost(postPrm).then((result) => {
+          this.props.history.push('/post/edit/'+result.data.data);
+        }).catch(function (error) {
+          const {messages} = error.response.data;
+            messages.map((item) => {
+              return (
+                notification.warning({
+                  message: 'Life Code',
+                  description: item
+                })
+              )
             })
-          )
-        })
-    });
+        });
+    }
+    
   }
   render () {
     const {postPrm} = this.state;
@@ -149,7 +143,7 @@ class Post extends React.Component {
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Header */}
         <Row noGutters className="page-header py-4">
-          <PageTitle sm="4" title="" subtitle="Create Post" className="text-sm-left" />
+          <PageTitle sm="4" title="" subtitle={this.state.isSaved?'Edit Post':'Create Post'} className="text-sm-left" />
         </Row>
         <Row>
           <Col lg="9" md="12">
