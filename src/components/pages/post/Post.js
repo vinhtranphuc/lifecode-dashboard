@@ -11,7 +11,7 @@ import SidebarCategories from "./SidebarCategories";
 
 import {connect} from "react-redux";
 import { bindActionCreators } from "redux";
-import {createPost,getPostByPostId} from "../../../actions/postsAction";
+import {createPost,editPost,getPostByPostId} from "../../../actions/postsAction";
 import './CreatePost.css';
 import PostImages from "./PostImages";
 import { notification } from 'antd';
@@ -58,6 +58,20 @@ class Post extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const {post} = newProps;
+    this.setPostState(post);
+    // postPrm.postId = post.post_id;
+    // postPrm.categoryId = post.category_id;
+    // postPrm.tags = post.tags.map(item => item.tag_id);
+    // postPrm.level = post.level;
+    // postPrm.postImages = post.images.map(item => item.path);
+    // postPrm.title = post.title;
+    // postPrm.content = post.content;
+    // this.setState({
+    //   postPrm: postPrm
+    // })
+  }
+
+  setPostState(post) {
     const {postPrm} = this.state;
     postPrm.postId = post.post_id;
     postPrm.categoryId = post.category_id;
@@ -135,6 +149,27 @@ class Post extends React.Component {
             })
         });
     }
+    else {
+      this.props.editPost(postPrm).then((result) => {
+        const post = result.data.data;
+        this.setPostState(post);
+        notification.success({
+          message: 'Life Code',
+          description: result.data.message,
+        });
+      }).catch(function (error) {
+        debugger
+        // const {messages} = error.response.data;
+        //   messages.map((item) => {
+        //     return (
+        //       notification.warning({
+        //         message: 'Life Code',
+        //         description: item
+        //       })
+        //     )
+        //   })
+      });
+    }
     
   }
   render () {
@@ -183,7 +218,7 @@ const mapSateToProps = (state) => {
   }
 }
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({createPost:createPost,getPostByPostId:getPostByPostId},dispatch);
+  return bindActionCreators({createPost:createPost,editPost:editPost,getPostByPostId:getPostByPostId},dispatch);
 } 
 
 export default connect(mapSateToProps,mapDispatchToProps)(Post);
