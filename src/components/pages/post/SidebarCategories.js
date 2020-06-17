@@ -15,14 +15,40 @@ import {
   FormRadio,
   FormInput
 } from "shards-react";
-import { Popconfirm,Modal } from 'antd';
+import { Popconfirm,Modal,Upload,message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import CategoryImage from "./CategoryImage";
 
 import {connect} from "react-redux";
 import { bindActionCreators } from "redux";
 
 import {checkExistsCategory,addCategory,removeCategory,getCategories} from "../../../actions/categoriesAction";
+import ImgCrop from 'antd-img-crop';
 
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 10;
+  if (!isLt2M) {
+    message.error('Image must smaller than 10MB!');
+    notification.warning({
+      message: 'Life Code',
+      description: 'Image must smaller than 10MB!',
+      style:{zIndex:"9999"}
+    });
+  }
+  return isJpgOrPng && isLt2M; 
+}
 class SidebarCategories extends React.Component {
   
   constructor(props) {
@@ -30,7 +56,29 @@ class SidebarCategories extends React.Component {
     this.state = {
       visible: false,
       category: "",
-      categoryImg: ""
+      categoryImg: "",
+      previewVisible: false,
+    previewImage: '',
+    previewTitle: '',
+    fileList: [
+      // {
+      //   uid: '1',
+      //   name: 'image.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
+      // {
+      //   uid: '2',
+      //   name: 'image.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
+      // {
+      //   uid: '3',
+      //   name: 'image.png',
+      //   status: 'error',
+      // },
+    ],
     };
     this.handleSelectCategory = this.handleSelectCategory.bind(this);
   }
@@ -68,6 +116,7 @@ class SidebarCategories extends React.Component {
   }
 
   showModal = () => {
+    
     if(!this.state.category || this.state.category === "") {
       notification.warning({
         message: 'Life Code',
@@ -85,10 +134,7 @@ class SidebarCategories extends React.Component {
         });
         return;
       }
-      // show modal
-      this.setState({
-        visible: true,
-      });
+      this.inputElement.click();
     }).catch(function (error) {
       notification.warning({
         message: 'Life Code',
@@ -180,7 +226,33 @@ class SidebarCategories extends React.Component {
     });
   }
 
+  handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    this.setState({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+    });
+  };
+  handleChange = ({ fileList }) => {
+    this.setState({ fileList});
+    fileList = fileList.map(item => {
+      if(!item.response) 
+        return item.url;
+      return item.response[0]
+    });
+    // show modal
+    this.setState({
+      categoryImg: fileList[fileList.length-1],
+      visible: true,
+    });
+  };
+
   render() {
+    let { previewVisible, previewImage, fileList, previewTitle } = this.state;
+
     return(
       <div>
         <Card small className="mb-3">
@@ -216,14 +288,27 @@ class SidebarCategories extends React.Component {
             </ListGroup>
           </CardBody>
         </Card>
+        <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={8/3}>
+            <Upload
+                name="files"
+                action="http://localhost:8888/api/image/preview"
+                listType="picture-card"
+                // fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                beforeUpload={beforeUpload}
+            >
+                {fileList.length >= 6 ? null : <PlusOutlined ref={input => this.inputElement = input}/>}
+            </Upload>
+        </ImgCrop>
         <Modal zIndex={9999} closable={false} 
           className="img-category-modal"
           visible={this.state.visible} onOk={this.handleOk}
           onCancel={this.handleCancel} 
           onOk={this.handleAddCategory}
           width="fit-content"
-          maxWidth={1988}
-          maxHeight={490}>
+          maxWidth={1920}
+          maxHeight={720}>
             <CategoryImage handleGetImg={this.handleGetImg.bind(this)} categoryImg={this.state.categoryImg}/>
         </Modal>
       </div>
