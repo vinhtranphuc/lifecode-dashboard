@@ -31,6 +31,10 @@ class SidebarActions extends React.Component {
     let level = e.currentTarget.getAttribute('level');
     this.props.handleGetLevel(level)
   }
+
+  isUpdate = (createdAt, updatedAt) => {
+    return createdAt != updatedAt;
+  }
   render() {
     return(
       <Card small className="mb-3">
@@ -56,7 +60,8 @@ class SidebarActions extends React.Component {
               </span>
               <span className="d-flex mb-2">
                 <i className="material-icons mr-1">calendar_today</i>
-                <strong className="mr-1">Created At:</strong> Not Yet{" "}
+                <strong className="mr-1">{this.isUpdate(this.props.createdAt,this.props.updatedAt)?'Updated At':'Created At'}:</strong> 
+                {this.props.createdAt===''?'Not Yet':this.props.updatedAt}
               </span>
             </ListGroupItem>
             <ListGroupItem className="d-flex px-3 border-0" style={{paddingTop:0}}>

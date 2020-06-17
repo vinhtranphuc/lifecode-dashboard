@@ -31,7 +31,9 @@ class Post extends React.Component {
         level:5,
         postImages:[],
         title:'',
-        content:''
+        content:'',
+        createdAt:'',
+        updatedAt:''
       }
     }
   }
@@ -59,16 +61,6 @@ class Post extends React.Component {
   componentWillReceiveProps(newProps) {
     const {post} = newProps;
     this.setPostState(post);
-    // postPrm.postId = post.post_id;
-    // postPrm.categoryId = post.category_id;
-    // postPrm.tags = post.tags.map(item => item.tag_id);
-    // postPrm.level = post.level;
-    // postPrm.postImages = post.images.map(item => item.path);
-    // postPrm.title = post.title;
-    // postPrm.content = post.content;
-    // this.setState({
-    //   postPrm: postPrm
-    // })
   }
 
   setPostState(post) {
@@ -80,6 +72,9 @@ class Post extends React.Component {
     postPrm.postImages = post.images.map(item => item.path);
     postPrm.title = post.title;
     postPrm.content = post.content;
+    postPrm.createdAt = post.created_at;
+    postPrm.updatedAt = post.updated_at;
+    debugger
     this.setState({
       postPrm: postPrm
     })
@@ -124,16 +119,17 @@ class Post extends React.Component {
       postPrm: postPrm
     })
   }
+  handleGetContent(content) {
+    const {postPrm} = this.state;
+    postPrm.content = content;
+    this.setState({
+      postPrm: postPrm
+    })
+  }
 
   handleSave() {
-    // get content 
-    const ckContent = ReactDOM.findDOMNode(this).getElementsByClassName('ck-content')[0];
-    const content = ckContent?ckContent.innerHTML:"";
 
-    // get prm
     let {isSaved,postPrm} = this.state;
-    postPrm.content = content; // put conent to prm
-
     if(!isSaved) {
       this.props.createPost(postPrm).then((result) => {
           this.props.history.push('/post/edit/'+result.data.data);
@@ -148,8 +144,7 @@ class Post extends React.Component {
               )
             })
         });
-    }
-    else {
+    } else {
       this.props.editPost(postPrm).then((result) => {
         const post = result.data.data;
         this.setPostState(post);
@@ -158,19 +153,17 @@ class Post extends React.Component {
           description: result.data.message,
         });
       }).catch(function (error) {
-        debugger
-        // const {messages} = error.response.data;
-        //   messages.map((item) => {
-        //     return (
-        //       notification.warning({
-        //         message: 'Life Code',
-        //         description: item
-        //       })
-        //     )
-        //   })
+        const {messages} = error.response.data;
+          messages.map((item) => {
+            return (
+              notification.warning({
+                message: 'Life Code',
+                description: item
+              })
+            )
+          })
       });
     }
-    
   }
   render () {
     const {postPrm} = this.state;
@@ -184,19 +177,20 @@ class Post extends React.Component {
           <Col lg="9" md="12">
             <Row>
               <Col lg="12" md="12">
-               <Editor title={postPrm.title} content={postPrm.content} handleGetTitle={this.handleGetTitle.bind(this)}/>
+               <Editor title={postPrm.title} content={postPrm.content} handleGetContent={this.handleGetContent.bind(this)} handleGetTitle={this.handleGetTitle.bind(this)}/>
               </Col>
             </Row>
             <Row>
               <Col lg="7" md="12">
                 <PostImages postImages={this.state.postPrm.postImages} handleGetPostImages={this.handleGetPostImages.bind(this)}/>
-                {/* postImages={this.state.postPrm.postImages} */}
               </Col>
               <Col lg="5" md="12">
                 <SidebarActions
                   isSaved={this.state.isSaved}
                   level={this.state.postPrm.level}
                   onRef={ref => (this.actions = ref)}
+                  createdAt={this.state.postPrm.createdAt}
+                  updatedAt={this.state.postPrm.updatedAt}
                   handleGetLevel={this.handleGetLevel.bind(this)}
                   handleSave={this.handleSave.bind(this)}/>
               </Col>

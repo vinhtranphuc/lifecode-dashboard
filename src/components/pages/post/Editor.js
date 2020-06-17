@@ -31,23 +31,19 @@ class Editor extends React.Component {
             <FormInput size="lg" className="mb-3" placeholder="Your Post Title" value={this.props.title} onChange={this.onChangeTitle.bind(this)}/>
             <CKEditor
                     editor={ ClassicEditor }
-                    //data={this.htmlDecode(this.props.content)}
                     data={this.props.content}
                     onInit={editor => {
                       editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                         return new UploadImgAdapter(loader);
                       };
-                      console.log('Editor is ready to use!', editor);
                     }}
                     onChange={ ( event, editor ) => {
                         const data = editor.getData();
-                        console.log( { event, editor, data } );
+                        this.props.handleGetContent(data);
                     } }
                     onBlur={ ( event, editor ) => {
-                        console.log( 'Blur.', editor );
                     } }
                     onFocus={ ( event, editor ) => {
-                        console.log( 'Focus.', editor );
                     } }
                 />
           </Form>

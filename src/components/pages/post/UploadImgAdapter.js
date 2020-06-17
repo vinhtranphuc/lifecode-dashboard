@@ -1,5 +1,5 @@
 // CUSTOM LOADER
-class MyUploadAdapter {
+class UploadImgAdapter {
     constructor(loader, url) {
         // The FileLoader instance to use during the upload. It sounds scary but do not
         // worry — the loader will be passed into the adapter later on in this guide.
@@ -12,11 +12,20 @@ class MyUploadAdapter {
   
     // Starts the upload process.
     upload() {
-        return new Promise((resolve, reject) => {
-          //  this._initRequest();
-            //this._initListeners(resolve, reject);
-         //   this._sendRequest();
-        });
+        // return new Promise((resolve, reject) => {
+        //   //  this._initRequest();
+        //     //this._initListeners(resolve, reject);
+        //  //   this._sendRequest();
+        // });
+
+        return this.loader.file
+            .then( file => new Promise( ( resolve, reject ) => {
+                  var myReader= new FileReader();
+                  myReader.onloadend = (e) => {
+                     resolve({ default: myReader.result });
+                  }
+                  myReader.readAsDataURL(file);
+            } ) );
     }
   
     // Aborts the upload process.
@@ -93,4 +102,4 @@ class MyUploadAdapter {
     }
   }
   
-export default MyUploadAdapter;
+export default UploadImgAdapter;

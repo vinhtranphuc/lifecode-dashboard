@@ -8,6 +8,7 @@ import {
 import { Upload, Modal, message } from 'antd';
 import { notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -67,7 +68,6 @@ class PostImages extends React.Component {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
-
     this.setState({
       previewImage: file.url || file.preview,
       previewVisible: true,
@@ -100,13 +100,12 @@ class PostImages extends React.Component {
       if(!item.response) 
         return item.url;
       return item.response[0]
-    }); 
+    });
     this.props.handleGetPostImages(fileList);
   };
 
   render() {
     let { previewVisible, previewImage, fileList, previewTitle } = this.state;
-    // fileList = this.props.postImages?this.props.postImages:fileList;
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -120,8 +119,8 @@ class PostImages extends React.Component {
         </CardHeader>
         <CardBody className="p-2">
             <div className="clearfix">
+            <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={6/4}>
                 <Upload
-                    //action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                     name="files"
                     action="http://localhost:8888/api/image/preview"
                     listType="picture-card"
@@ -132,6 +131,7 @@ class PostImages extends React.Component {
                 >
                     {fileList.length >= 6 ? null : uploadButton}
                 </Upload>
+              </ImgCrop>
                 <Modal
                     visible={previewVisible}
                     title={previewTitle}
