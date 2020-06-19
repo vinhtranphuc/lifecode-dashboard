@@ -18,12 +18,14 @@ import {
     } from './postsReducer';
 import Categories from './categoriesReducer';
 import Tags from './tagsReducer';
+import {UriImages} from './imagesReducer';
 import {
         AccessToken,
         CurrentUser
     } from './userReducer';
 
 const allReducers = combineReducers({
+    uriImages: UriImages,
     categories:Categories,
     tags: Tags,
     popularPosts: PopularPosts,

@@ -74,7 +74,6 @@ class Post extends React.Component {
     postPrm.content = post.content;
     postPrm.createdAt = post.created_at;
     postPrm.updatedAt = post.updated_at;
-    debugger
     this.setState({
       postPrm: postPrm
     })

@@ -26,3 +26,7 @@ li.p-3.list-group-item .custom-radio {
 .ck-content {
   height: 455px;
 }
+
+.crop-category-img .ant-upload-picture-card-wrapper {
+  display: none !important;
+}

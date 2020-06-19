@@ -115,7 +115,7 @@ class SidebarCategories extends React.Component {
     return result;
   }
 
-  showModal = () => {
+  selectCategoryImg = () => {
     
     if(!this.state.category || this.state.category === "") {
       notification.warning({
@@ -144,29 +144,16 @@ class SidebarCategories extends React.Component {
     });
   };
 
-  handleOk = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
   handleGetImg(base64Img) {
     this.setState({
       categoryImg: base64Img
     })
   };
 
-  handleAddCategory = e => {
+  handleAddCategory = (categoryImg) => {
     const categoryPrm = {
       category: this.state.category,
-      categoryImg: this.state.categoryImg
+      categoryImg: categoryImg
     }
 
     this.props.addCategory(categoryPrm).then((result) => {
@@ -220,38 +207,21 @@ class SidebarCategories extends React.Component {
    this.props.handleGetCategory("");
   }
 
-  handleUpdateCatetory(e) {
+  handleChangeCatetory(e) {
     this.setState({
       category: e.target.value
     });
   }
 
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  handleAddCagetoryImg = ({file }) => {
+    if(file && file.status === 'done') {
+      const categoryImg= file.response[0];
+      this.handleAddCategory(categoryImg);
     }
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    });
-  };
-  handleChange = ({ fileList }) => {
-    this.setState({ fileList});
-    fileList = fileList.map(item => {
-      if(!item.response) 
-        return item.url;
-      return item.response[0]
-    });
-    // show modal
-    this.setState({
-      categoryImg: fileList[fileList.length-1],
-      visible: true,
-    });
   };
 
   render() {
-    let { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    let { fileList} = this.state;
 
     return(
       <div>
@@ -277,10 +247,10 @@ class SidebarCategories extends React.Component {
                       <i className="material-icons">delete</i>Delete
                     </Button>
                   </Popconfirm>
-                  <FormInput onChange={this.handleUpdateCatetory.bind(this)} value={this.state.category} placeholder="new category" />
+                  <FormInput onChange={this.handleChangeCatetory.bind(this)} value={this.state.category} placeholder="new category" />
                   <InputGroupAddon type="append">
-                    <Button theme="white" className="px-2" onClick = {this.showModal}>
-                      <i className="material-icons">add</i>
+                    <Button theme="white" className="px-2" onClick = {this.selectCategoryImg}>
+                      <i className="material-icons">add_a_photo</i>
                     </Button>
                   </InputGroupAddon>
                 </InputGroup>
@@ -288,29 +258,19 @@ class SidebarCategories extends React.Component {
             </ListGroup>
           </CardBody>
         </Card>
-        <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={8/3}>
-            <Upload
-                name="files"
-                action="http://localhost:8888/api/image/preview"
-                listType="picture-card"
-                // fileList={fileList}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-                beforeUpload={beforeUpload}
-            >
-                {fileList.length >= 6 ? null : <PlusOutlined ref={input => this.inputElement = input}/>}
-            </Upload>
-        </ImgCrop>
-        <Modal zIndex={9999} closable={false} 
-          className="img-category-modal"
-          visible={this.state.visible} onOk={this.handleOk}
-          onCancel={this.handleCancel} 
-          onOk={this.handleAddCategory}
-          width="fit-content"
-          maxWidth={1920}
-          maxHeight={720}>
-            <CategoryImage handleGetImg={this.handleGetImg.bind(this)} categoryImg={this.state.categoryImg}/>
-        </Modal>
+        <div className="crop-category-img" >
+          <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={8/3}>
+              <Upload
+                  name="files"
+                  action="http://localhost:8888/api/image/preview"
+                  listType="picture-card"
+                  onChange={this.handleAddCagetoryImg}
+                  beforeUpload={beforeUpload}
+              >
+                  <PlusOutlined ref={input => this.inputElement = input}/>
+              </Upload>
+          </ImgCrop>
+        </div>
       </div>
     );
   }
