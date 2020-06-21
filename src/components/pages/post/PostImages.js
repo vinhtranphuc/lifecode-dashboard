@@ -37,6 +37,37 @@ function beforeUpload(file) {
   return isJpgOrPng && isLt2M; 
 }
 
+async function resizeImage(base64Str, maxWidth, maxHeight) {
+   return new Promise((resolve) => {
+    let img = new Image()
+    img.src = base64Str
+    img.onload = () => {
+      let canvas = document.createElement('canvas')
+      const MAX_WIDTH = maxWidth
+      const MAX_HEIGHT = maxHeight
+      let width = img.width
+      let height = img.height
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width
+          width = MAX_WIDTH
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height
+          height = MAX_HEIGHT
+        }
+      }
+      canvas.width = width
+      canvas.height = height
+      let ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, width, height)
+      resolve(canvas.toDataURL())
+    }
+  });
+}
+
 class PostImages extends React.Component {
   state = {
     previewVisible: false,
@@ -96,13 +127,24 @@ class PostImages extends React.Component {
     }
   }
 
-  handleChange = ({ fileList }) => {
+  handleChange = async ({ fileList }) => {
     this.setState({ fileList});
     fileList = fileList.map(item => {
       if(!item.response) 
         return item.url;
-      return item.response[0]
+      return item.response[0];
     });
+    for(let i=0;i<fileList.length;i++) {
+      if(fileList[i] && fileList[i].startsWith('data:')) {
+        let result = "";
+        await resizeImage(fileList[i],700,467).then(data => {
+          result = data;
+        }).catch(error => {
+          console.log(error);
+        })
+        fileList[i] = result;
+      }
+    }
     this.props.handleGetPostImages(fileList);
   };
 

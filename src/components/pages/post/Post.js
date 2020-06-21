@@ -133,6 +133,7 @@ class Post extends React.Component {
       this.props.createPost(postPrm).then((result) => {
           this.props.history.push('/post/edit/'+result.data.data);
         }).catch(function (error) {
+          debugger
           const {messages} = error.response.data;
             messages.map((item) => {
               return (
