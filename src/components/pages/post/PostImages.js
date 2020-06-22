@@ -9,7 +9,7 @@ import { Upload, Modal, message } from 'antd';
 import { notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
-import SelectImages from "../../fragements/SelectImages";
+import SelectImages from "./SelectImages";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -185,13 +185,13 @@ class PostImages extends React.Component {
                     <img alt="example" style={{ width: '100%', height: '100%' }} src={previewImage} />
                 </Modal>
                 <Modal
-                    width={1025}
+                    width={1000}
                     visible={selectImgVisible}
                     title={'Choose images'}
                     footer={null}
                     onCancel={this.handleCancelSelect}
                 >
-                    <SelectImages maxHeight={this.props.maxHeight}/>
+                    <SelectImages/>
                 </Modal>
             </div>
         </CardBody>

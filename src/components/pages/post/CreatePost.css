@@ -30,3 +30,14 @@ li.p-3.list-group-item .custom-radio {
 .crop-category-img .ant-upload-picture-card-wrapper {
   display: none !important;
 }
+
+.image-gallery {
+  width: 949px !important;
+}
+
+.image-gallery-image {
+  cursor: pointer;
+}
+.image-gallery-thumbnail-image {
+  cursor: default;
+}
