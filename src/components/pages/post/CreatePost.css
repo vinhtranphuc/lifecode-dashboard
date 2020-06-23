@@ -23,6 +23,10 @@ li.p-3.list-group-item .custom-radio {
   margin-right: 2px !important;
 }
 
+.post-action .custom-control {
+  padding-left: 1;
+}
+
 .ck-content {
   height: 455px;
 }
@@ -32,7 +36,7 @@ li.p-3.list-group-item .custom-radio {
 }
 
 .image-gallery {
-  width: 949px !important;
+  width: 1111px !important;
 }
 
 .image-gallery-image {

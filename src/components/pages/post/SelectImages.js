@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Upload,Button } from 'antd';
-import { UploadOutlined  } from '@ant-design/icons';
 import ImageGallery from 'react-image-gallery';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -13,6 +11,7 @@ class SelectImages extends Component {
         this.state = {
             images: []
         }
+        this.handleSelectImage = this.handleSelectImage.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -27,20 +26,21 @@ class SelectImages extends Component {
         const param = {
             post_id: '',
             start_img: 1,
-            to_img: 100
+            to_img: ''
         }
         this.props.getUriImages(param);
     }
 
-    handleThumbnailClick = (e) => {
-        debugger
+    handleSelectImage (e){
+        const uriImg = (e.currentTarget.childNodes[0].children[0].src)?(e.currentTarget.childNodes[0].children[0].src):'';
+        this.props.handleGetImageSelected(uriImg);
     }
 
     render() {
         return (
             <>
                 <div className="d-flex border-0 pb-4">
-                    <ImageGallery onThumbnailClick={this.handleThumbnailClick}
+                    <ImageGallery onClick={this.handleSelectImage}
                             onTouchStart={this.onTouchStart}
                             sizes={10} 
                             items={this.state.images}
@@ -50,24 +50,6 @@ class SelectImages extends Component {
                             showIndex={true}
                             thumbnailPosition='left'
                             slideOnThumbnailOver={true} />
-                </div>
-                <div className="d-flex border-0 pb-2">
-                    <Upload className="ml-2"
-                        name="files"
-                        action="http://localhost:8888/api/image/preview"
-                        listType="picture-card"
-                        // fileList={fileList}
-                        // onPreview={this.handlePreview}
-                        // onChange={this.handleChange}
-                        // beforeUpload={beforeUpload}
-                    >
-                         <UploadOutlined  style={{ fontSize: '55px'}} />
-                    </Upload>
-                </div>
-                <div className="d-flex pl-1 border-0">
-                    <Button success onClick={() => console.log(this.state.image)}>
-                        OK
-                    </Button>
                 </div>
             </>
         )

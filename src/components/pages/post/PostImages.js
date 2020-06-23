@@ -1,13 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
 import {
-    Card,
-    CardHeader,
-    CardBody
-  } from "shards-react";
-import { Upload, Modal, message } from 'antd';
+  Card,
+  CardHeader,
+  CardBody,
+  InputGroupAddon,
+  Button as ButtonSR
+} from "shards-react";
+import { Button, Upload, Modal, message } from 'antd';
 import { notification } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
 import SelectImages from "./SelectImages";
 
@@ -31,14 +33,14 @@ function beforeUpload(file) {
     notification.warning({
       message: 'Life Code',
       description: 'Image must smaller than 10MB!',
-      style:{zIndex:"9999"}
+      style: { zIndex: "9999" }
     });
   }
-  return isJpgOrPng && isLt2M; 
+  return isJpgOrPng && isLt2M;
 }
 
 async function resizeImage(base64Str, maxWidth, maxHeight) {
-   return new Promise((resolve) => {
+  return new Promise((resolve) => {
     let img = new Image()
     img.src = base64Str
     img.onload = () => {
@@ -73,7 +75,7 @@ class PostImages extends React.Component {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
-    selectImgVisible:true,
+    selectImgVisible: false,
     fileList: [
       // {
       //   uid: '1',
@@ -93,6 +95,7 @@ class PostImages extends React.Component {
       //   status: 'error',
       // },
     ],
+    isLoadImg:false
   };
 
   handleCancelPreview = () => this.setState({ previewVisible: false });
@@ -109,13 +112,13 @@ class PostImages extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const {postImages} = nextProps;
-    let {fileList} = this.state;
-    if(postImages && postImages.length>fileList.length) {
+    const { postImages } = nextProps;
+    let { fileList } = this.state;
+    if (postImages && postImages.length > fileList.length) {
       nextProps.postImages.map((item, index) => {
         let img = {
-          uid: index+1,
-          name: 'img_'+index+1,
+          uid: index + 1,
+          name: 'img_' + index + 1,
           status: 'saved',
           url: item
         }
@@ -128,16 +131,16 @@ class PostImages extends React.Component {
   }
 
   handleChange = async ({ fileList }) => {
-    this.setState({ fileList});
+    this.setState({ fileList });
     fileList = fileList.map(item => {
-      if(!item.response) 
+      if (!item.response)
         return item.url;
       return item.response[0];
     });
-    for(let i=0;i<fileList.length;i++) {
-      if(fileList[i] && fileList[i].startsWith('data:')) {
+    for (let i = 0; i < fileList.length; i++) {
+      if (fileList[i] && fileList[i].startsWith('data:')) {
         let result = "";
-        await resizeImage(fileList[i],700,467).then(data => {
+        await resizeImage(fileList[i], 740, 492.63).then(data => {
           result = data;
         }).catch(error => {
           console.log(error);
@@ -148,55 +151,85 @@ class PostImages extends React.Component {
     this.props.handleGetPostImages(fileList);
   };
 
+  handleGetImageSelected(uriImg) {
+    let { fileList } = this.state;
+    if (fileList.length >= 10)
+      return;
+
+    let uriList = fileList.map(e => e.url);
+    if (uriList.includes(uriImg))
+      return;
+
+    const index = fileList.length + 1;
+    let img = {
+      uid: index,
+      name: 'img_' + index,
+      status: 'saved',
+      url: uriImg
+    }
+    fileList.push(img);
+    this.setState({
+      fileList: fileList
+    })
+  }
+
+  handleLoadImages() {
+    this.setState({
+      isLoadImg:true
+    })
+  }
   render() {
-    let { previewVisible, previewImage, fileList, previewTitle,selectImgVisible } = this.state;
+    let { isLoadImg,previewVisible, previewImage, fileList, previewTitle, selectImgVisible } = this.state;
     const uploadButton = (
       <div>
-        <PlusOutlined />
-        <div className="ant-upload-text">Upload</div>
+        <UploadOutlined style={{ fontSize: '20px' }} />
+        <div className="ant-upload-text">upload</div>
       </div>
     );
     return (
-        <Card small className="mb-3">
+      <Card small className="mb-3">
         <CardHeader className="border-bottom">
-          <h6 className="m-0">Avatar images</h6>
+          <h6 className="m-0 ml-2">Avatar images</h6>
         </CardHeader>
         <CardBody className="p-2">
-            <div className="clearfix">
-            <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={6/4}>
-                <Upload
-                    name="files"
-                    action="http://localhost:8888/api/image/preview"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                    beforeUpload={beforeUpload}
-                >
-                    {fileList.length >= 6 ? null : uploadButton}
-                </Upload>
-              </ImgCrop>
-                <Modal
-                    visible={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancelPreview}
-                >
-                    <img alt="example" style={{ width: '100%', height: '100%' }} src={previewImage} />
-                </Modal>
-                <Modal
-                    width={1000}
-                    visible={selectImgVisible}
-                    title={'Choose images'}
-                    footer={null}
-                    onCancel={this.handleCancelSelect}
-                >
-                    <SelectImages/>
-                </Modal>
-            </div>
+          <div className="clearfix">
+            <ImgCrop rotate={true} modalWidth={900} styleImport={false} aspect={3 / 2}>
+              <Upload
+                name="files"
+                action="http://localhost:8888/api/image/preview"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                beforeUpload={beforeUpload}
+              >
+                {fileList.length >= 10 ? null : uploadButton}
+              </Upload>
+            </ImgCrop>
+            <Modal
+              visible={previewVisible}
+              title={previewTitle}
+              footer={null}
+              onCancel={this.handleCancelPreview}
+            >
+              <img alt="example" style={{ width: '100%', height: '100%' }} src={previewImage} />
+            </Modal>
+          </div>
         </CardBody>
+        <CardHeader className="border-top">
+          <InputGroupAddon type="append">
+            {isLoadImg&&<h6 className="m-0 ml-2 mr-2">Select images</h6>}
+            {!isLoadImg&&<ButtonSR onClick={this.handleLoadImages.bind(this)} theme="white" className="px-2">
+              Load available images
+            </ButtonSR>}
+          </InputGroupAddon>
+        </CardHeader>
+        {isLoadImg&&
+          <CardBody className="p-2">
+          <SelectImages handleGetImageSelected={this.handleGetImageSelected.bind(this)} />
+          </CardBody>}
       </Card>
-      
+
     );
   }
 }

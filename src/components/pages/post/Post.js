@@ -181,24 +181,23 @@ class Post extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col lg="7" md="12">
+              <Col lg="12" md="12">
                 <PostImages postImages={this.state.postPrm.postImages} handleGetPostImages={this.handleGetPostImages.bind(this)}/>
-              </Col>
-              <Col lg="5" md="12">
-                <SidebarActions
-                  isSaved={this.state.isSaved}
-                  level={this.state.postPrm.level}
-                  onRef={ref => (this.actions = ref)}
-                  createdAt={this.state.postPrm.createdAt}
-                  updatedAt={this.state.postPrm.updatedAt}
-                  handleGetLevel={this.handleGetLevel.bind(this)}
-                  handleSave={this.handleSave.bind(this)}/>
               </Col>
             </Row>
           </Col>
           <Col lg="3" md="12">
+            <SidebarActions
+                    isSaved={this.state.isSaved}
+                    level={this.state.postPrm.level}
+                    onRef={ref => (this.actions = ref)}
+                    createdAt={this.state.postPrm.createdAt}
+                    updatedAt={this.state.postPrm.updatedAt}
+                    handleGetLevel={this.handleGetLevel.bind(this)}
+                    handleSave={this.handleSave.bind(this)}/>
             <SidebarCategories categoryId={this.state.postPrm.categoryId} handleGetCategory={this.handleGetCategory.bind(this)}/>
             <SidebarTags checkTags={this.state.postPrm.tags} handleGetTagCheck={this.handleGetTagCheck.bind(this)}/>
+            
           </Col>
         </Row>
       </Container>

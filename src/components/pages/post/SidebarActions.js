@@ -37,7 +37,7 @@ class SidebarActions extends React.Component {
   }
   render() {
     return(
-      <Card small className="mb-3">
+      <Card small className="mb-3 post-action">
         <CardHeader className="border-bottom">
           <h6 className="m-0">{this.props.title}</h6>
         </CardHeader>
