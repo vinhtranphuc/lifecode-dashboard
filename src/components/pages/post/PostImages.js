@@ -7,7 +7,7 @@ import {
   InputGroupAddon,
   Button as ButtonSR
 } from "shards-react";
-import { Button, Upload, Modal, message } from 'antd';
+import { Upload, Modal, message } from 'antd';
 import { notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
@@ -75,7 +75,6 @@ class PostImages extends React.Component {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
-    selectImgVisible: false,
     fileList: [
       // {
       //   uid: '1',
@@ -99,7 +98,6 @@ class PostImages extends React.Component {
   };
 
   handleCancelPreview = () => this.setState({ previewVisible: false });
-  handleCancelSelect = () => this.setState({ selectImgVisible: false });
   handlePreview = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -156,7 +154,7 @@ class PostImages extends React.Component {
     if (fileList.length >= 10)
       return;
 
-    let uriList = fileList.map(e => e.url);
+    let uriList = fileList.filter(e=>e.url).map(e => e.url);
     if (uriList.includes(uriImg))
       return;
 
@@ -168,9 +166,16 @@ class PostImages extends React.Component {
       url: uriImg
     }
     fileList.push(img);
+
     this.setState({
       fileList: fileList
-    })
+    });
+    fileList = fileList.map(item => {
+      if (!item.response)
+        return item.url;
+      return item.response[0];
+    });
+    this.props.handleGetPostImages(fileList);
   }
 
   handleLoadImages() {
@@ -179,7 +184,7 @@ class PostImages extends React.Component {
     })
   }
   render() {
-    let { isLoadImg,previewVisible, previewImage, fileList, previewTitle, selectImgVisible } = this.state;
+    let { isLoadImg,previewVisible, previewImage, fileList, previewTitle } = this.state;
     const uploadButton = (
       <div>
         <UploadOutlined style={{ fontSize: '20px' }} />
