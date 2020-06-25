@@ -45,3 +45,7 @@ li.p-3.list-group-item .custom-radio {
 .image-gallery-thumbnail-image {
   cursor: default;
 }
+
+.posts-action .ant-space-item{
+  cursor: pointer;
+}

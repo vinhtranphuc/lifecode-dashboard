@@ -46,7 +46,7 @@ class SelectImages extends Component {
                             items={this.state.images}
                             showFullscreenButton={false}
                             showPlayButton={false}
-                            infinite={false}
+                            infinite={true}
                             showIndex={true}
                             thumbnailPosition='left'
                             slideOnThumbnailOver={true} />
