@@ -7,9 +7,12 @@ const _getPosts = (data) => {
     data
 })};
 
-export const getPosts = () => {
+export const getPosts = (params = {
+    start_post : '',
+    records_no : ''
+}) => {
     return async (dispatch) => {
-        const result = await axios.get('blog/posts',requestConfig());
+        const result = await axios.get('blog/posts?start_post='+params.start_post+'&records_no='+params.records_no,requestConfig());
         let {data} = result.data;
         dispatch(_getPosts(data));
     };

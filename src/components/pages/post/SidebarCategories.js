@@ -221,8 +221,6 @@ class SidebarCategories extends React.Component {
   };
 
   render() {
-    let { fileList} = this.state;
-
     return(
       <div>
         <Card small className="mb-3">
