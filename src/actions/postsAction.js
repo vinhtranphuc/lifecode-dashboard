@@ -8,11 +8,11 @@ const _getPosts = (data) => {
 })};
 
 export const getPosts = (params = {
-    start_post : '',
+    page : '',
     records_no : ''
 }) => {
     return async (dispatch) => {
-        const result = await axios.get('blog/posts?start_post='+params.start_post+'&records_no='+params.records_no,requestConfig());
+        const result = await axios.get('blog/posts?page='+params.page+'&records_no='+params.records_no,requestConfig());
         let {data} = result.data;
         dispatch(_getPosts(data));
     };
@@ -254,11 +254,11 @@ export const editPost = (postPrm) => {
     };
 };
 
-// return () => {
-//     const tagObj = {
-//         tag: tagObjPrm.tag
-//     };
-//     return axios.post('blog/add-tag', tagObj).then(result => {
-//         return result;
-//     });
-// };
+export const deletePost = (params = {
+    post_id : ''
+}) => {
+    return async (dispatch) => {
+        const result = await axios.delete('blog/delete-post?postId='+params.post_id,requestConfig());
+        return result;
+    };
+};

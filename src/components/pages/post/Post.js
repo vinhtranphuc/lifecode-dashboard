@@ -197,7 +197,6 @@ class Post extends React.Component {
                     handleSave={this.handleSave.bind(this)}/>
             <SidebarCategories categoryId={this.state.postPrm.categoryId} handleGetCategory={this.handleGetCategory.bind(this)}/>
             <SidebarTags checkTags={this.state.postPrm.tags} handleGetTagCheck={this.handleGetTagCheck.bind(this)}/>
-            
           </Col>
         </Row>
       </Container>

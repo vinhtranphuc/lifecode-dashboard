@@ -49,3 +49,15 @@ li.p-3.list-group-item .custom-radio {
 .posts-action .ant-space-item{
   cursor: pointer;
 }
+
+.more-text {
+  cursor: pointer;
+}
+.more-text:hover {
+  color: #03a9f4;
+}
+
+.ant-popover{
+  max-width: 300px !important;
+}
+
