@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import React, { Component } from "react";
 import { Space, Pagination,Popover } from "antd";
 import {
@@ -14,7 +15,14 @@ class PostList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageSize: 7
+      postPrm : {
+        page: '',
+        records_no: 7,
+        all: 'true',
+        created_at: '',
+        tag_ids: '',
+        userNameOrEmail:''
+      }
     }
     this.handleLoadPage = this.handleLoadPage.bind(this);
   }
@@ -23,11 +31,9 @@ class PostList extends Component {
   }
 
   handleLoadPage(page) {
-    const params = {
-      page:page,
-      records_no:this.state.pageSize
-    }
-    this.props.getPosts(params);
+    const {postPrm} = this.state;
+    postPrm.page = page;
+    this.props.getPosts(postPrm);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,8 +54,8 @@ class PostList extends Component {
   }
   handleLoadData = (list,page_of_post) => {
     const records = [];
-    const {pageSize} = this.state;
-    let startIndex = pageSize*(page_of_post-1)+1;
+    const {records_no} = this.state.postPrm;
+    let startIndex = records_no*(page_of_post-1)+1;
     {list&&list.map((e,i) => {
       let postId = e.post_id;
       let title = this.handleShowText(e.title,15,i);
@@ -116,7 +122,7 @@ class PostList extends Component {
   }
   render() {
     const {list,page_of_post,total_posts} = this.props.posts;
-    const {pageSize} = this.state;
+    const {records_no} = this.state.postPrm;
     return (
       <>
         <Row>
@@ -141,7 +147,7 @@ class PostList extends Component {
                   {this.handleLoadData(list,page_of_post)}
                 </tbody>
               </table>
-              <Pagination className="mt-3" onChange={this.handleChangePage} defaultPageSize={pageSize} current={page_of_post} total={total_posts} />
+              <Pagination className="mt-3" onChange={this.handleChangePage} defaultPageSize={records_no} current={page_of_post} total={total_posts} />
             </div>
           </Col>
         </Row>
