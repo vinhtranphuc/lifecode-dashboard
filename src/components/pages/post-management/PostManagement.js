@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody, FormInput } from "shards-react";
 
 import PageTitle from "../../fragements/PageTitle";
-import CategoryFilter from "../../fragements/Categories";
+import CategoryFilter from "./CategoryFilter";
 import DateFilter from "../../fragements/DateFilter";
 import PostLevelFilter from "./PostLevelFilter";
 import TagFilter from "./TagFilter";
@@ -23,7 +23,8 @@ class PostManagement extends React.Component {
         all: 'true',
         created_at: '',
         tag_ids: [],
-        userNameOrEmail:''
+        userNameOrEmail:'',
+        category_id:''
       }
     }
   }
@@ -37,6 +38,23 @@ class PostManagement extends React.Component {
   handleFilterTags (tag_ids) {
     let {postPrm} = this.state;
     postPrm.tag_ids = tag_ids;
+    this.props.getPosts(postPrm);
+    this.setState({
+      postPrm:postPrm
+    })
+  }
+  handleFilterCategory (categoryId) {
+    let {postPrm} = this.state;
+    postPrm.category_id = categoryId;
+    this.props.getPosts(postPrm);
+    this.setState({
+      postPrm:postPrm
+    })
+  }
+  handleFilterUserNameOrEmail(e) {
+    const userNameOrEmail = e.target.value;
+    let {postPrm} = this.state;
+    postPrm.userNameOrEmail = userNameOrEmail;
     this.props.getPosts(postPrm);
     this.setState({
       postPrm:postPrm
@@ -58,7 +76,7 @@ class PostManagement extends React.Component {
                 <Col md="2" className="form-group">
                   <strong className="text-muted d-block mb-2">User name or email</strong>
                   <Row className="pl-3 pr-3">
-                    <FormInput size="sm">
+                    <FormInput size="sm" onChange={this.handleFilterUserNameOrEmail.bind(this)}>
                     </FormInput>
                   </Row>
                 </Col>
@@ -68,7 +86,7 @@ class PostManagement extends React.Component {
                 </Col>
                 <Col md="1" className="form-group">
                   <strong className="text-muted d-block mb-2">Categories</strong>
-                  <CategoryFilter></CategoryFilter>
+                  <CategoryFilter handleFilterCategory={this.handleFilterCategory.bind(this)}></CategoryFilter>
                 </Col>
                 <Col md="2">
                   <strong className="text-muted d-block mb-2">Post level</strong>

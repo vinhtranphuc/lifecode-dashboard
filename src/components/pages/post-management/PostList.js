@@ -46,6 +46,7 @@ class PostList extends Component {
       let tags = this.handleShowText(e.tags.map(e => ' '+e.tag).toString(),30,i);
       let createAt = this.handleShowText(e.created_at,20,i);
       let users = this.handleShowText(e.users.map(e => ' '+e.username).toString(),20,i);
+      let emails = this.handleShowText(e.users.map(e => ' '+e.email).toString(),20,i);
       let timeOfView = this.handleShowText(e.times_of_view,5,i);
       let numberOfComments = this.handleShowText(e.number_of_comments,5,i);
       records.push(
@@ -57,6 +58,7 @@ class PostList extends Component {
           <td>{tags}</td>
           <td>{createAt}</td>
           <td>{users}</td>
+          <td>{emails}</td>
           <td>{timeOfView}</td>
           <td>{numberOfComments}</td>
           <td className="posts-action">
@@ -120,6 +122,7 @@ class PostList extends Component {
                     <th scope="col" className="border-0">Tags</th>
                     <th scope="col" className="border-0">Create At</th>
                     <th scope="col" className="border-0">Users</th>
+                    <th scope="col" className="border-0">Emails</th>
                     <th scope="col" className="border-0">Time of views</th>
                     <th scope="col" className="border-0">Comments</th>
                     <th scope="col" className="border-0">Actions</th>

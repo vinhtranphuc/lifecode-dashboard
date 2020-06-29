@@ -14,10 +14,11 @@ export const getPosts = (params = {
     all: '',
     created_at: '',
     tag_ids: '',
-    userNameOrEmail:''
+    userNameOrEmail:'',
+    category_id:''
 }) => {
     return async (dispatch) => {
-        const result = await axios.get('blog/posts?all=' + params.all + '&page=' + params.page + '&records_no=' + params.records_no + '&created_at=' + params.created_at+'&tag_ids='+params.tag_ids+'&userNameOrEmail='+params.userNameOrEmail+'', requestConfig());
+        const result = await axios.get('blog/posts?all=' + params.all + '&page=' + params.page + '&records_no=' + params.records_no + '&created_at=' + params.created_at+'&tag_ids='+params.tag_ids+'&userNameOrEmail='+params.userNameOrEmail+'&category_id='+params.category_id, requestConfig());
         let { data } = result.data;
         dispatch(_getPosts(data));
     };
