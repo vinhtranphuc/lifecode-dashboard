@@ -14,32 +14,15 @@ class PostList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      postPrm : {
-        page: '',
-        records_no: 7,
-        all: 'true',
-        created_at: '',
-        tag_ids: '',
-        userNameOrEmail:''
-      }
-    }
     this.handleLoadPage = this.handleLoadPage.bind(this);
-  }
-  componentDidMount() {
-    this.handleLoadPage(1);
   }
 
   handleLoadPage(page) {
-    const {postPrm} = this.state;
+    const {postPrm} = this.props;
     postPrm.page = page;
     this.props.getPosts(postPrm);
   }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.posts);
-  }
-
+ 
   handleChangePage = page => {
     this.handleLoadPage(page);
   }
@@ -54,7 +37,7 @@ class PostList extends Component {
   }
   handleLoadData = (list,page_of_post) => {
     const records = [];
-    const {records_no} = this.state.postPrm;
+    const {records_no} = this.props.postPrm;
     let startIndex = records_no*(page_of_post-1)+1;
     {list&&list.map((e,i) => {
       let postId = e.post_id;
@@ -113,7 +96,6 @@ class PostList extends Component {
         description: result.data.message
       });
     }).catch(function (error) {
-      debugger
       notification.warning({
         message: 'Life Code',
         description: error.response.data.message
@@ -122,7 +104,7 @@ class PostList extends Component {
   }
   render() {
     const {list,page_of_post,total_posts} = this.props.posts;
-    const {records_no} = this.state.postPrm;
+    const {records_no} = this.props.postPrm;
     return (
       <>
         <Row>

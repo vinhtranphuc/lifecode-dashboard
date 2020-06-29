@@ -84,7 +84,12 @@ class SidebarCategories extends React.Component {
   }
 
   handleSelectCategory(e) {
-    let categoryId = e.currentTarget.getAttribute('categoryid');
+    let radioInput = e.currentTarget.parentElement.childNodes.item(".custom-control-input")
+    if(e.currentTarget.tagName == 'INPUT') {
+      return;
+    }
+    radioInput.checked = !radioInput.checked;
+    let categoryId = radioInput.getAttribute('categoryid');
     this.props.handleGetCategory(categoryId);
   }
 
@@ -97,14 +102,14 @@ class SidebarCategories extends React.Component {
     for(let i=0;i<categories.length;i++) {
       if(((i+1)%2) !== 0) {
         result.push(
-          <div key={i} className="row">
+          <div key={i} className="row radioList">
             {<div className="col-md-6">
-            <FormRadio checked={this.props.categoryId === categories[i].category_id} onClick={this.handleSelectCategory} key={categories[i].category_id} categoryid = {categories[i].category_id} className="mb-1" value="design" name="category">
+            <FormRadio checked={this.props.categoryId === categories[i].category_id} onChange={this.handleSelectCategory} key={categories[i].category_id} categoryid = {categories[i].category_id} className="mb-1" value="design" name="category">
               {categories[i].category}
             </FormRadio>
             </div>}
             {(i+1)<categories.length&&<div className="col-md-6">
-            <FormRadio checked={this.props.categoryId === categories[i+1].category_id} onClick={this.handleSelectCategory} key={categories[i+1].category_id} categoryid = {categories[i+1].category_id} className="mb-1" value="design" name="category">
+            <FormRadio checked={this.props.categoryId === categories[i+1].category_id} onChange={this.handleSelectCategory} key={categories[i+1].category_id} categoryid = {categories[i+1].category_id} className="mb-1" value="design" name="category">
               {categories[i+1].category}
             </FormRadio>
             </div>}

@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, CardHeader, CardBody, FormInput, FormRadio }
 
 import PageTitle from "../../fragements/PageTitle";
 import DateFilter from "../../fragements/DateFilter";
-import PostList from "./UserList";
+import UserList from "./UserList";
 
 class UserManagement extends Component {
 
@@ -80,7 +80,7 @@ class UserManagement extends Component {
                 </Row>
               </CardHeader>
               <CardBody className="p-0 pb-3">
-                <PostList/>
+                <UserList/>
               </CardBody>
             </Card>
           </Col>

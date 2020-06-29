@@ -22,7 +22,12 @@ li.p-3.list-group-item .custom-radio {
 .level .custom-radio {
   margin-right: 2px !important;
 }
-
+.checkList .custom-checkbox {
+  cursor: default !important;
+}
+.radioList .custom-radio {
+  cursor: default !important;
+}
 .post-action .custom-control {
   padding-left: 1;
 }

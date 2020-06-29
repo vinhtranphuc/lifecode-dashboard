@@ -41,9 +41,14 @@ class SidebarTags extends React.Component {
   }
 
   handleCheckTag = (e) => {
-    let tagId = parseInt(e.currentTarget.getAttribute('tagId'));
+    let chkInput = e.currentTarget.parentElement.childNodes.item("#dr-checkbox-c4M-iymIiB")
+    if(e.currentTarget.tagName == 'INPUT') {
+      return;
+    }
+    chkInput.checked = !chkInput.checked;
+    let tagId = parseInt(chkInput.getAttribute('tagId'));
     var arr = [...this.props.checkTags];
-    if(e.currentTarget.checked) {
+    if(chkInput.checked) {
       arr.push(tagId);
     } else {
       var index = arr.indexOf(tagId);
@@ -104,14 +109,14 @@ class SidebarTags extends React.Component {
     for(let i=0;i<tags.length;i++) {
       if(((i+1)%2) !== 0) {
         result.push(
-          <div key={i} className="row">
+          <div key={i} className="row checkList">
             {<div className="col-md-6">
             <FormCheckbox checked={this.isCheckedTag(tags[i].tag_id,this.props.checkTags)} key={tags[i].tag_id} tagid={tags[i].tag_id} onChange={this.handleCheckTag} className="mb-1" value="design">
               {tags[i].tag}
             </FormCheckbox>
             </div>}
             {(i+1)<tags.length&&<div className="col-md-6">
-            <FormCheckbox checked={this.isCheckedTag(tags[i+1].tag_id,this.props.checkTags)} key={tags[i+1].tag_id} tagid={tags[i+1].tag_id} onClick={this.handleCheckTag} className="mb-1" value="design">
+            <FormCheckbox checked={this.isCheckedTag(tags[i+1].tag_id,this.props.checkTags)} key={tags[i+1].tag_id} tagid={tags[i+1].tag_id} onChange={this.handleCheckTag} className="mb-1" value="design">
               {tags[i+1].tag}
             </FormCheckbox>
             </div>}

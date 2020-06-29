@@ -28,7 +28,12 @@ class SidebarActions extends React.Component {
   }
 
   onChangeLevel(e) {
-    let level = e.currentTarget.getAttribute('level');
+    let radioInput = e.currentTarget.parentElement.childNodes.item(".custom-control-input")
+    if(e.currentTarget.tagName == 'INPUT') {
+      return;
+    }
+    radioInput.checked = !radioInput.checked;
+    let level = radioInput.getAttribute('level');
     this.props.handleGetLevel(level)
   }
 
@@ -37,14 +42,14 @@ class SidebarActions extends React.Component {
   }
   render() {
     return(
-      <Card small className="mb-3 post-action">
+      <Card small className="mb-3">
         <CardHeader className="border-bottom">
           <h6 className="m-0">{this.props.title}</h6>
         </CardHeader>
         <CardBody className="p-0">
           <ListGroup flush>
             <ListGroupItem className="p-3">
-              <span className="d-flex mb-2 level">
+              <span className="d-flex mb-2 level radioList">
                 <i className="material-icons mr-1">flag</i>
                 <strong className="mr-1">Level:</strong>
                 <FormRadio checked={parseInt(this.props.level)===1} onChange={this.onChangeLevel} className="mb-1" value="design" name="level" level='1'>1</FormRadio>
@@ -65,7 +70,7 @@ class SidebarActions extends React.Component {
               </span>
             </ListGroupItem>
             <ListGroupItem className="d-flex px-3 border-0" style={{paddingTop:0}}>
-              <Button onClick={this.props.handleSave} outline theme="accent" size="sm" style = {{width: '40%', marginLeft: '33%'}}>
+              <Button onClick={this.props.handleSave} outline theme="accent" size="sm" style = {{width: '50%', marginLeft: '25%'}}>
                 <i className="material-icons">{this.props.isSaved?'edit':'save'}</i>{this.props.isSaved?' EDIT POST':' CREATE NEW POST'}
               </Button>
             </ListGroupItem>
