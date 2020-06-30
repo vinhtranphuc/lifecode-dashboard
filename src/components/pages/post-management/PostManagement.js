@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, CardHeader, CardBody, FormInput } from "shar
 import PageTitle from "../../fragements/PageTitle";
 import CategoryFilter from "./CategoryFilter";
 import DateFilter from "../../fragements/DateFilter";
-import PostLevelFilter from "./PostLevelFilter";
+import LevelFilter from "./LevelFilter";
 import TagFilter from "./TagFilter";
 import PostList from "./PostList";
 
@@ -24,7 +24,8 @@ class PostManagement extends React.Component {
         created_at: '',
         tag_ids: [],
         userNameOrEmail:'',
-        category_id:''
+        category_id:'',
+        levels:[]
       }
     }
   }
@@ -61,6 +62,24 @@ class PostManagement extends React.Component {
     })
   }
 
+  handleFilterLevel(levels) {
+    let {postPrm} = this.state;
+    postPrm.levels = levels;
+    this.props.getPosts(postPrm);
+    this.setState({
+      postPrm:postPrm
+    })
+  }
+
+  handleFilterDate(date) {
+    let {postPrm} = this.state;
+    postPrm.created_at = date;
+    this.props.getPosts(postPrm);
+    this.setState({
+      postPrm:postPrm
+    })
+  }
+
   render() {
     return (<Container fluid className="main-content-container px-4">
       {/* Page Header */}
@@ -82,7 +101,7 @@ class PostManagement extends React.Component {
                 </Col>
                 <Col md="1" className="form-group">
                   <strong className="text-muted d-block mb-2">Create date</strong>
-                  <DateFilter></DateFilter>
+                  <DateFilter handleFilterDate={this.handleFilterDate.bind(this)}></DateFilter>
                 </Col>
                 <Col md="1" className="form-group">
                   <strong className="text-muted d-block mb-2">Categories</strong>
@@ -90,7 +109,7 @@ class PostManagement extends React.Component {
                 </Col>
                 <Col md="2">
                   <strong className="text-muted d-block mb-2">Post level</strong>
-                  <PostLevelFilter></PostLevelFilter>
+                  <LevelFilter handleFilterLevel={this.handleFilterLevel.bind(this)}></LevelFilter>
                 </Col>
                 <Col md="6">
                   <strong className="text-muted d-block mb-2">Tags</strong>

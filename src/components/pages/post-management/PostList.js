@@ -10,6 +10,7 @@ import { FundViewOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icon
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getPosts,deletePost } from '../../../actions/postsAction';
+
 class PostList extends Component {
 
   constructor(props) {
