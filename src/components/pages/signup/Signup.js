@@ -87,24 +87,25 @@ class Signup extends Component {
                 <h4 className="page-title">Sign Up</h4>
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <FormItem 
+                        <FormItem
                             label="Full Name"
                             validateStatus={this.state.name.validateStatus}
                             help={this.state.name.errorMsg}>
                             <Input 
-                                size="large"
+                                size="medium"
                                 name="name"
                                 autoComplete="off"
                                 placeholder="Your full name"
                                 value={this.state.name.value} 
                                 onChange={(event) => this.handleInputChange(event, this.validateName)} />    
                         </FormItem>
-                        <FormItem label="Username"
+                        <FormItem
+                            label="Username"
                             hasFeedback
                             validateStatus={this.state.username.validateStatus}
                             help={this.state.username.errorMsg}>
                             <Input 
-                                size="large"
+                                size="medium"
                                 name="username" 
                                 autoComplete="off"
                                 placeholder="A unique username"
@@ -112,13 +113,13 @@ class Signup extends Component {
                                 onBlur={this.validateUsernameAvailability}
                                 onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    
                         </FormItem>
-                        <FormItem 
-                            label="Email"
+                        <FormItem
+                            label="Email:"
                             hasFeedback
                             validateStatus={this.state.email.validateStatus}
                             help={this.state.email.errorMsg}>
                             <Input 
-                                size="large"
+                                size="medium"
                                 name="email" 
                                 type="email" 
                                 autoComplete="off"
@@ -132,7 +133,7 @@ class Signup extends Component {
                             validateStatus={this.state.password.validateStatus}
                             help={this.state.password.errorMsg}>
                             <Input 
-                                size="large"
+                                size="medium"
                                 name="password" 
                                 type="password"
                                 autoComplete="off"
@@ -143,7 +144,7 @@ class Signup extends Component {
                         <FormItem>
                             <Button type="primary" 
                                 htmlType="submit" 
-                                size="large" 
+                                size="medium" 
                                 className="signup-form-button"
                                 disabled={this.isFormInvalid()}>Sign up</Button>
                             Already registed? <Link to="/login">Login now!</Link>

@@ -4,6 +4,15 @@
     margin-top: 40px;    
 }
 
+.signup-container .ant-form-item-control {
+    max-width: 70%;
+    float: right;
+}
+
+.signup-container input {
+    float: right;
+}
+
 .signup-form-button {
     width: 100%;
     margin-top: 15px;
