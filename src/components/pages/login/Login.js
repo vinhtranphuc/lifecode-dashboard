@@ -50,7 +50,9 @@ class LoginForm extends Component {
     }
     
     static getDerivedStateFromProps(nextProps) {
-        saveToken(nextProps.accessToken);
+        if(nextProps.accessToken) {
+            saveToken(nextProps.accessToken);
+        }
     }
 
     onFinish = ({ errorFields }) => {
@@ -69,13 +71,23 @@ class LoginForm extends Component {
                     notification.error({
                         message: 'Life Code',
                         description: 'Your Username or Password is incorrect. Please try again!'
-                    });                    
-                } else {
+                    });
+                    return;          
+                }
+
+                if(error.response && error.response.status === 403) {
+                    clearToken();
                     notification.error({
                         message: 'Life Code',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
-                    });                                            
+                        description: error.response.data.message
+                    });
+                    return;          
                 }
+
+                notification.error({
+                    message: 'Life Code',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });                                            
             });
         });
     };

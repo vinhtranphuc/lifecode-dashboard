@@ -13,6 +13,9 @@ import { Form, Input, Button, notification } from 'antd';
 const FormItem = Form.Item;
 
 class Signup extends Component {
+
+    formRef = React.createRef();
+
     constructor(props) {
         super(props);
         this.state = {
@@ -26,6 +29,9 @@ class Signup extends Component {
                 value: ''
             },
             password: {
+                value: ''
+            },
+            confirmPassword: {
                 value: ''
             }
         }
@@ -78,6 +84,7 @@ class Signup extends Component {
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
             this.state.password.validateStatus === 'success'
+            // this.state.confirmPassword.validateStatus === 'success'
         );
     }
 
@@ -86,7 +93,7 @@ class Signup extends Component {
             <div className="signup-container">
                 <h4 className="page-title">Sign Up</h4>
                 <div className="signup-content">
-                    <Form onSubmit={this.handleSubmit} className="signup-form">
+                    <Form ref={this.formRef} className="signup-form">
                         <FormItem
                             label="Full Name"
                             validateStatus={this.state.name.validateStatus}
@@ -141,11 +148,25 @@ class Signup extends Component {
                                 value={this.state.password.value} 
                                 onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
                         </FormItem>
+                        <FormItem 
+                            label="Confirm Password"
+                            validateStatus={this.state.confirmPassword.validateStatus}
+                            help={this.state.confirmPassword.errorMsg}>
+                            <Input 
+                                size="medium"
+                                name="confirmPassword" 
+                                type="password"
+                                autoComplete="off"
+                                placeholder="A password between 6 to 20 characters" 
+                                value={this.state.confirmPassword.value} 
+                                onChange={(event) => this.handleInputChange(event, this.validateConfirmPassword)} />    
+                        </FormItem>
                         <FormItem>
                             <Button type="primary" 
                                 htmlType="submit" 
                                 size="medium" 
                                 className="signup-form-button"
+                                onClick={this.handleSubmit}
                                 disabled={this.isFormInvalid()}>Sign up</Button>
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
@@ -341,6 +362,26 @@ class Signup extends Component {
             return {
                 validationStatus: 'error',
                 errorMsg: `Password is too long (Maximum ${PASSWORD_MAX_LENGTH} characters allowed.)`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };            
+        }
+    }
+
+    validateConfirmPassword = (confirmPwd) => {
+        const password = this.state.password.value;
+        if(password == null || password === '') {
+            return {
+                validateStatus: 'error',
+                errorMsg: `Please input password first !`
+            }
+        } else if(confirmPwd != password) {
+            return {
+                validateStatus: 'error',
+                errorMsg: `Password confirm is not correct.`
             }
         } else {
             return {
