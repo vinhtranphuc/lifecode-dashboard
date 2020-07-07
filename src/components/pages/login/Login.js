@@ -32,9 +32,11 @@ class Login extends Component {
         const AntWrappedLoginForm = connect(mapStateToProps,mapDispatchToProps)(LoginForm)
         return (
             <div className="login-container">
-                <h4 className="page-title">Login</h4>
-                <div className="login-content">
-                    <AntWrappedLoginForm goHome={this.goHome}/>
+                <div className="auth-form-group">
+                    <h4 className="page-title">Login</h4>
+                    <div className="login-content">
+                        <AntWrappedLoginForm goHome={this.goHome}/>
+                    </div>
                 </div>
             </div>
         );

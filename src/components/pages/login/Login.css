@@ -1,15 +1,11 @@
 body {
   background: #FFFFFF !important;
 }
-.page-title {
-    text-align: center;
-    margin-bottom: 15px;
-}
+
 .login-container {
   max-width: 420px;
   margin: 0 auto;
   margin: 0 auto;
-  margin-top: 40px;
 }
 
 .login-form-button {
