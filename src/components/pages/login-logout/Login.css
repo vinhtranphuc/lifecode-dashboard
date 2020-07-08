@@ -8,6 +8,10 @@ body {
   margin: 0 auto;
 }
 
+.login-container .auth-form-group {
+  margin-top: 50%;
+}
+
 .login-form-button {
   width: 100%;
 }
@@ -77,11 +81,6 @@ body {
   color: rgba(0, 0, 0, 0.85);
 }
 
-.profile-menu .username-info {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.65);
-}
-
 .dropdown-item {
   padding: 10px 12px;
 }
@@ -99,17 +98,14 @@ body {
   margin-top: -4px;
 }
 
-@media (max-width: 768px) {
-  .app-title a {
-    font-size: 20px;
-  }
+.social-icons{
+  margin-top: 4%;
+}
+.social-icons span {
+  margin-right: 2%;
+  font-size: 200%;
+}
 
-  .app-menu>li {
-    padding: 0 15px;
-  }
-
-  .app-menu>li>a {
-    padding: 0 15px;
-    margin: 0 -15px;
-  }
+.social-icons .anticon {
+  cursor: pointer;
 }

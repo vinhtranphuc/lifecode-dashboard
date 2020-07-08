@@ -69,7 +69,7 @@ class Post extends React.Component {
     postPrm.categoryId = post.category_id;
     postPrm.tags = post.tags.map(item => item.tag_id);
     postPrm.level = post.level;
-    postPrm.postImages = post.images.map(item => item.path);
+    postPrm.postImages = post.images.map(item => item.file_name);
     postPrm.title = post.title;
     postPrm.content = post.content;
     postPrm.createdAt = post.created_at;

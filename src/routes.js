@@ -15,7 +15,9 @@ import UserManagement from "./components/pages/user-management/UserManagement";
 
 import HomePosts from "./components/pages/home-posts/HomePosts";
 import PublicLayout from "./components/public_layout";
-import Login from "./components/pages/login/Login";
+import EmptyLayout from "./components/empty_layout";
+import Login from "./components/pages/login-logout/Login";
+import Logout from "./components/pages/login-logout/Logout";
 import Signup from "./components/pages/signup/Signup";
 
 import Error404 from "./components/pages/errors/Error404"
@@ -38,6 +40,12 @@ export default [
     isAuth: false,
     layout: PublicLayout,
     component: Login
+  },
+  {
+    path: "/logout",
+    isAuth: false,
+    layout: EmptyLayout,
+    component: Logout
   },
   {
     path: "/overview",

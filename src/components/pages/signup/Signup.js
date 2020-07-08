@@ -92,7 +92,7 @@ class Signup extends Component {
         return (
             <div className="signup-container">
                 <div className="auth-form-group">
-                    <h4 className="page-title">Sign Up</h4>
+                    <h5 className="page-title">Sign Up</h5>
                     <div className="signup-content">
                         <Form ref={this.formRef} className="signup-form">
                             <FormItem
@@ -114,7 +114,7 @@ class Signup extends Component {
                                     size="medium"
                                     name="username" 
                                     autoComplete="off"
-                                    placeholder="A unique username"
+                                    placeholder="Your user name"
                                     value={this.state.username.value} 
                                     onBlur={this.validateUsernameAvailability}
                                     onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    
@@ -141,7 +141,7 @@ class Signup extends Component {
                                     name="password" 
                                     type="password"
                                     autoComplete="off"
-                                    placeholder="A password between 6 to 20 characters" 
+                                    placeholder="Your password (between 6 to 20 characters)" 
                                     value={this.state.password.value} 
                                     onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
                             </FormItem>
@@ -153,7 +153,7 @@ class Signup extends Component {
                                     name="confirmPassword" 
                                     type="password"
                                     autoComplete="off"
-                                    placeholder="confirm Password" 
+                                    placeholder="Confirm password" 
                                     value={this.state.confirmPassword.value} 
                                     onChange={(event) => this.handleInputChange(event, this.validateConfirmPassword)} />    
                             </FormItem>

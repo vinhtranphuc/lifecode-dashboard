@@ -1,11 +1,10 @@
-.page-title {
-    text-align: center;
-    margin-bottom: 15px;
-}
 .signup-container {
     max-width: 420px;
     margin: 0 auto;
     margin-top: 40px;    
+}
+.signup-container .auth-form-group {
+    margin-top: 40%;
 }
 
 .signup-container .ant-form-item-label {
@@ -22,13 +21,13 @@
     margin-top: 15px;
 }
 
-.signup-form-button[disabled], .signup-form-button[disabled]:hover, .signup-form-button[disabled]:focus {
+/* .signup-form-button[disabled], .signup-form-button[disabled]:hover, .signup-form-button[disabled]:focus {
     opacity: 0.6;
     color: #fff;
     background-color: #1890ff;
     border-color: #1890ff;
-}
+} */
 
-.signup-form input {
+/* .signup-form input {
     margin-bottom: 3px;
-}
+} */

@@ -1,13 +1,11 @@
 .page-title {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
 }
-
 .auth-form-group {
   border: 2px solid #ffffff;
   border-radius: 7px;
   padding: 10%;
-  margin-top: 70%;
   background-color: #ffffff;
 }
 
@@ -28,6 +26,13 @@
   color: #fff;
   background-color: #cddc39;
   border-color: #cddc39;
+}
+
+.auth-form-group button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+  background-color: #4CAF50;
+  border-color: #4CAF50;
 }
 .auth-form-group a {
   color: #009688;

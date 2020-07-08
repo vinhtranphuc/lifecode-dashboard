@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, Button, notification } from 'antd';
-import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {UserOutlined, LockOutlined, GithubOutlined , FacebookOutlined , GoogleOutlined } from '@ant-design/icons';
 import {connect} from "react-redux"
 import { bindActionCreators } from "redux";
 import {login, getCurrentUser} from "../../../actions/userAction";
@@ -33,7 +33,7 @@ class Login extends Component {
         return (
             <div className="login-container">
                 <div className="auth-form-group">
-                    <h4 className="page-title">Login</h4>
+                    <h5 className="page-title">Login</h5>
                     <div className="login-content">
                         <AntWrappedLoginForm goHome={this.goHome}/>
                     </div>
@@ -114,7 +114,15 @@ class LoginForm extends Component {
                 </FormItem>
                 <FormItem>
                     <Button type="primary" htmlType="submit" size="large" className="login-form-button">Login</Button>
-                    Or <Link to="/signup">register now!</Link>
+                    <div className="social-icons">
+                        <GithubOutlined />
+                        <FacebookOutlined />
+                        <GoogleOutlined />
+                        <a style={{ float: 'right' }} href="/signup">
+                            Register
+                        </a>
+                    </div>
+                    
                 </FormItem>
             </Form>
         );
