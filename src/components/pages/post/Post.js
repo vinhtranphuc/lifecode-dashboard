@@ -131,6 +131,10 @@ class Post extends React.Component {
     let {isSaved,postPrm} = this.state;
     if(!isSaved) {
       this.props.createPost(postPrm).then((result) => {
+          notification.success({
+            message: 'Life Code',
+            description: result.data.message
+          });
           this.props.history.push('/post/edit/'+result.data.data);
         }).catch(function (error) {
           debugger

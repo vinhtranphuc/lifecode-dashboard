@@ -94,6 +94,7 @@ class PostList extends Component {
   handleDelete = (postId) => {
     const param = {post_id:postId};
     this.props.deletePost(param).then((result) => {
+      this.handleLoadPage(1);
       notification.success({
         message: 'Life Code',
         description: result.data.message

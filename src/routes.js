@@ -21,6 +21,7 @@ import Logout from "./components/pages/login-logout/Logout";
 import Signup from "./components/pages/signup/Signup";
 
 import Error404 from "./components/pages/errors/Error404"
+import OAuth2RedirectHandler from "./components/pages/oauth2/OAuth2RedirectHandler";
 
 export default [
   {
@@ -46,6 +47,12 @@ export default [
     isAuth: false,
     layout: EmptyLayout,
     component: Logout
+  },
+  {
+    path: "/oauth2/redirect",
+    isAuth: false,
+    layout: EmptyLayout,
+    component: OAuth2RedirectHandler
   },
   {
     path: "/overview",
