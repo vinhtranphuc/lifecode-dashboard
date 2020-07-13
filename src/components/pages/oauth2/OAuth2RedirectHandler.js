@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { saveToken } from '../../../utils/TokenUtils';
+import { getCurrentUser } from "../../../actions/userAction";
 import { Redirect } from 'react-router-dom'
 
 class OAuth2RedirectHandler extends Component {
@@ -16,9 +17,12 @@ class OAuth2RedirectHandler extends Component {
         const error = this.getUrlParameter('error');
 
         if(token) {
-            saveToken(token);
+            fetch(saveToken(token)).then(()=> {
+                getCurrentUser();
+            });
+            
             return <Redirect to={{
-                pathname: "/profile",
+                pathname: "/overview",
                 state: { from: this.props.location }
             }}/>; 
         } else {

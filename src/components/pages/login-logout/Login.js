@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link,Redirect, withRouter } from 'react-router-dom';
 import { Form, Input, Button, notification } from 'antd';
 import { UserOutlined, LockOutlined, GithubOutlined, FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
 import { connect } from "react-redux"
@@ -28,7 +28,6 @@ class Login extends Component {
         this.goHome = this.goHome.bind(this);
         this.loginSocial = this.loginSocial.bind(this);
     }
-
     componentDidMount() {
         if(this.props.location.state && this.props.location.state.error) {
             setTimeout(() => {
@@ -49,14 +48,13 @@ class Login extends Component {
     loginSocial(social) {
         switch(social) {
             case "github":
-                window.open(GITHUB_AUTH_URL,'_blank');
-                //this.props.history.push(GITHUB_AUTH_URL);
+                window.location = GITHUB_AUTH_URL;
                 break;
             case "facebook":
-                this.props.history.push(FACEBOOK_AUTH_URL);
+                window.location = FACEBOOK_AUTH_URL;
                 break;
             case "google":
-                this.props.history.push(GOOGLE_AUTH_URL);
+                window.location = GOOGLE_AUTH_URL;
                 break;
         }
     }
