@@ -10,7 +10,7 @@
     "antd": "^4.2.4",
     "antd-img-crop": "^3.6.3",
     "camelize": "^1.0.0",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "ckeditor5-build-classic-plus": "^13.0.0",
     "ckeditor5-build-classic-plus-font": "^17.0.1",
     "classnames": "^2.2.6",
